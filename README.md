@@ -2,6 +2,7 @@ This repository contains our final project for the Specialist in System Administ
 
 Feel free to clone the repository and try it on your own, commit to it adjust it or just enjoy reading it.
 
+
 # LDAP-Project
 A simple and Basic LDAP-Server, and Server hardening
 
@@ -48,7 +49,7 @@ Snort (Intrusion detection)
 Suricata (Network-based IDS/IPS)
 Each of these tools has been configured for basic operation. For more detailed configurations and usage instructions, refer to the Documentation.
 
-Hardening and Threat Modeling
+Hardening and Threat Modeling https://github.com/OWASP/threat-dragon
 Hardening
 SSH Configuration: Ensure strong password policies, disable root login, and use key-based authentication.
 Firewall Rules: Restrict access to only necessary ports using UFW.
