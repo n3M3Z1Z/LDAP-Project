@@ -1,0 +1,9 @@
+# Organizational Units
+dn: ou=users,dc=hamster,dc=panzer
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=hamster,dc=panzer
+objectClass: organizationalUnit
+ou: groups
+

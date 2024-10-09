@@ -1,0 +1,3334 @@
+{
+  "version": "2.2.0",
+  "summary": {
+    "title": "LDAP-Server hamster.panzer 192.168.56.100",
+    "owner": "Smooth Beans GmbH",
+    "description": "Systemübersicht:\nDiese Virtuelle Maschine (VM) läuft auf Ununtu-Biotic und wird in VirtualBox gehostet. Diese Maschine dienst als administrativer Domain-Controller für die Smooth Beans GmbH mit dem Domain-Namen \"hamster.panzer\" mit der IP-Adresse 192.168.56.100. Die VM stellt zentrale Dienste wie LDAP und SSH bereit und legt besonderen Wert auf Sicherheit durch den Einsatz verschiedener Schutzmechanismen. Zukünftige Integationen umfassen ein Wazuh SIEM, einen Webserver, Client-Geräte sowie einen dezidierten Backup-Server.\n\nSystem-Spezifikationen:\n- Host-Plattform: VirtualBox VM\n- Betriebssystem: Ubuntu-Biotic\n- RAM: 4698 MB\n- CPU: 2 Kerne\n\nDienste:\n\n1. LDAP-Dienste:\n\nBereitstellung von Verzeichnisdiensten für die Administratordomäne 'hamster.panzer'. Dazu gehören Benutzer-Authentifizierung, Autorisierung und zentrale Verzeichnisverwaltung. \n\n2. Remote-Zugriffsdienst für die sichere Administration der VM und der LDAP-Dienste.\n\n\nSicherheitsfunktionen:\n\n- ClamAV & ClamAV-Daemon:\nBieten Echtzeitschutz und geplante Virenscans, zur Maleware Detektion um die Systemintegrität zu gewährleisten.\n\n- Snort:\nEin Netzwerk  Intrusion-Detection system, welches den Netzwerkwerkverkehr analysiert und bei potentiell schädlichen Aktivitäten Alarm schlägt.\n\n- Suricata:\nEin Netzwerk-Sicherheitsmonitoring-Tool, welches Eindringversuche erkennen  und verhinden, sowie das Netzwerk überwachen kann. Suricata ist ein Intrusion Detection und Intrusion Prevention System.\n\n- Fail2Ban:\nSchützt den LDAP-Server vor Brute-Force-Angriffen, indem es Anmeldeversuche überwacht und verdächtige IP-Adressen blockiert.\n\n-rkhunter:\nZur Detektion von Rootkits, Backdoors und lokalen Exploits, zur gewährleistung der Sicherheit und der Integrität des Systems.\n\n- UFW (Uncomplicated Firewall):\n Eine Firewall-Oberfläche für iptabels, welche den Zugriff auf bestimmte Dienste einschränkt und sichere Kommunikation sicherstellt. \n\n- AppArmor:\nEin Mandatory  Access Control (MAC)-Framework, welches Anwendungen innerhalb spezifischer Sicherheitsprofile beschränkt und so das Risoko bei einer eventuellen Kompromittierung minimiert.\n\nBackup-Strategie:\n\n- BorgBackup:\nDie VM nutzt neben den Snapshots auch BorgBackup für effiziente, duplizierte Systemdaten. Dies stellt eine zuverlässige Datenwiederherstellung und den Schutz vor Datenverlust sicher.\n\nNetzwerkkonfiguration:\n\n- IP-Adresse: 192.168.56.100\nDer virtuelle LADP-Server wurde mit einem Virtualbox typischen NAT-Netzwerkadpter für Updates und der Installation von Software sowie einem statischen Host-Only Netzwerkadapter zur Integration in das Unternehmens-Netzwerk konfiguriert. Dies gewährleistet einen verlässlichen Zugriff auf den Server aus dem internen Netzwerk bei gleichzeitiger gewährleistung der Verbindung in das Internet für Notwendige Updates.\n\n- Domain-Name: \"hamster.panzer\"\nDie Smooth Beans GmbH verwendet diesen einzigartigen Domain-Namen für die Verwaltung sowie die LDAP-Verzeichnisdiesnte.\n\nTrust Boundarys:\nTrust Boundaries sind in der IT-Sicherheit die Grenzlinien zwischen verschiedenen Systemen, Komponenten oder Zonen, die unterschiedliche Vertrauensniveaus haben. Diese Grenzen trennen Bereiche, in denen unterschiedliche Sicherheitsanforderungen gelten, z. B. ein internes Netzwerk und das Internet.\n\nInnerhalb eines Trust Boundaries wird davon ausgegangen, dass alle Komponenten ein gewisses Vertrauensniveau teilen, während bei Interaktionen über diese Grenze hinweg zusätzliche Sicherheitsmaßnahmen (wie Authentifizierung, Verschlüsselung oder Firewalls) notwendig sind. In dem Netzwerk des  Unternehmens \"Smooth Beans GmbH\" welches eigens für dieses Projekt entworfen wurde, wurden von uns mehrere Trust Boundarys definiert, welche nun kurz erläutert werden.\n\nTrust Boundary: LDAP-Administratoren:\nDie LDAP-Administratoren benötigen zur effektiven Administration der Admin-Domäne weitreichende Zugriffsberechtigungen, aus diesem Grund umfasst die Trust Boundary \"LDAP-Administratoren das gesamte Netzwerk. Nur die Mitglieder dieser Gruppe haben Zugriff und Zugang zu allen Ressourcen, sowie die nötigen Bechtigungen Änderungen und Konfigurationen vorzunehmen.\n\nTrust Boundary: Benutzer/ Clients:\nMitglieder dieser Gruppe haben lediglich Zugriff auf die Ressourcen welche für ihre Arbeit unerlässlich und Notwendig sind, dies umfasst den Zugriff auf LDAP-Dienste sowie den SSH-Dienst. Sie können keine Änderungen an den System- oder Softwarekonfigurationen vornehmen und erhalten keinen Zugriff auf essentielle Prozesse und Stores wie Log-Dateien oder Backup-Prozesse.\n\nTrust-Boundary: Internes Netzwerk:\nDies umfasst alle innerhalb des Firmen-Netzwerks, diese Grenze dienst der Abgrenzung zum Externen Netzwerk (Internet) Zugriff auf Ressourcen des Internen Netzwerks sind nur durch erfolgreiche Authentifizierung über den VPN-Server und die LDAP-Dienst möglich.\n\nTrust Boundary: Backup-Speicher:\nAuf diese Grenze haben lediglich die Administratoren Zugriff. In dieser Zone werden die Backup-Daten erstellt, gespeichert und im Notfall abgerufen.\n\nTrust Boundary: extern:\nDiese überschneidet sich mit der Demilitarisierten Zone. Die Firewall verhindert den unbefugten Zugriff durch unautorisierte Personen. Externe Entitäten ohne Zugriff auf das Interne Netzwerk haben lediglich Zugang zu den für sie zugänglichen ressourcen des Webservers, auf welchem sich auch der Webshop des Unternehmens befindet. \n\nDMZ-Demilitarisierte Zone:\nEine DMZ (Demilitarisierte Zone) ist ein Sicherheitskonzept in Netzwerken, das einen Bereich zwischen einem internen, vertrauenswürdigen Netzwerk und dem unsicheren Internet schafft. Die DMZ enthält in der Regel öffentlich zugängliche Server (wie Web- oder E-Mail-Server), während der direkte Zugriff auf das interne Netzwerk eingeschränkt wird.\n\nDas Ziel der DMZ ist es, kritische interne Systeme zu schützen, indem man sicherstellt, dass Angriffe auf öffentlich zugängliche Dienste nicht direkt ins interne Netzwerk gelangen. Der Datenverkehr in und aus der DMZ wird meist durch Firewalls und zusätzliche Sicherheitsrichtlinien kontrolliert.\n\nZukünftige Integration (Außerhalb des aktuellen Umfangs):\n\n- Wazuh-Agent:\nDer Wazuh-Agent wird installiert, um die Integration mit dem Wazuh SIEM zu ermöglichen, welches alle relevanten Log-Dateien gebündelt auswertet wodurch die Sicherheitsüberwachung und Ereignisskorrelation bietet.\n\n- Webserver:\nDer Webserver mit dem Online-Shop der Smooth Beans GmbH wird in die Domäne intigriet.\n\n- Backup-Server:\nDieses System wird mit einem dezidierten Backup-Server synchronisiert, um das Backup-Management zu gewährleisten.\n\n- Clients:\nVerschiedene Clients (Desktop/Notebooks) werden in der Zukunft über den LDAP-Server authentifiziert, dies zentralisiert das Benutzer-Management ebenso wie die Sicherheit des Netzwerks.\nAlle Log-Dateien werden verschlüsselt und schreibgeschützt gelagert, um unbefugten Zugriff zu verhindern. Der SSH-Dienst wird per RSA-Key geschützt.\n\nDie Out-of-Scope Elemente sind in dem STRIDE-Diagramm entsprechend dargestellt und dienen dort zur Orientierung, sie werden deshalb nicht  spezifisch analysiert und bewertet. Begründung:\n\n Diese Elemente wurden noch nicht der Domäne hinzugefügt wurden, weshalb sämtliche potentielle Bedrohungen welche auf diese Komponenten zutreffend sind, als nicht Mitiegiert bewertet werden müssen, dies bedarf keiner gesonderten Ausweisung in der nachfolgenden Analyse. eine Anpassung bzw. Erweiterung dieses Modells sollte Zeitnah nach deren Impementierung  erfolgen, um den Schutz des LDAP-Servers und des Netzwerkes weiterhin zu gewährleisten.\n\nDer VPN-Server, die Verwendung von Passwortmanagern, eine sichere Passwort-Policy werden als gegeben betrachtet. Auch der Einsatz von MFA (Multi-Faktor-Authentifizierung) wird als gegeben betrachtet. ",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [
+      {
+        "name": "Michael Herz"
+      },
+      {
+        "name": "Andy Salewski"
+      },
+      {
+        "name": "David Westmeyer"
+      }
+    ],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "New STRIDE diagram",
+        "diagramType": "STRIDE",
+        "placeholder": "New STRIDE diagram description",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "version": "2.2.0",
+        "cells": [
+          {
+            "position": {
+              "x": -7.105427357601002e-13,
+              "y": 245.00000000000023
+            },
+            "size": {
+              "width": 290,
+              "height": 610
+            },
+            "shape": "trust-boundary-box",
+            "attrs": {
+              "headerText": {
+                "text": "Trust Boundary/ Backup-Speicher"
+              }
+            },
+            "zIndex": -1,
+            "id": "363a2e71-010b-4355-b300-5dff50981ca5",
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Trust Boundary/ Backup-Speicher",
+              "description": "Zwischen den Backups und dem aktiven System.",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 1160,
+              "y": 380
+            },
+            "size": {
+              "width": 390,
+              "height": 190
+            },
+            "shape": "trust-boundary-box",
+            "attrs": {
+              "headerText": {
+                "text": "Trust Boundary/ Extern"
+              }
+            },
+            "zIndex": -1,
+            "id": "91f1d8a2-07b7-4c67-9e03-92436bd15f72",
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Trust Boundary/ Extern",
+              "description": "Grenze Zwischen internem und externen Netzwerk.",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 295,
+              "y": 190.0000000000005
+            },
+            "size": {
+              "width": 610,
+              "height": 230
+            },
+            "shape": "trust-boundary-box",
+            "attrs": {
+              "headerText": {
+                "text": "Trust Boundary/ LDAP-Benutzer"
+              }
+            },
+            "zIndex": -1,
+            "id": "2a3c08b4-9321-4cc0-8270-9a9a4ca6f345",
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Trust Boundary/ LDAP-Benutzer",
+              "description": "Benutzer welche legitim auf die LDAP-Dienste zugreiffen.",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 22.5,
+              "y": 125.00000000000307
+            },
+            "size": {
+              "width": 1280,
+              "height": 670
+            },
+            "shape": "trust-boundary-box",
+            "attrs": {
+              "headerText": {
+                "text": "Trust Boundary/ Internes Netzwerk"
+              }
+            },
+            "zIndex": -1,
+            "id": "d0e43704-0e04-44ed-b329-d7e771a38b92",
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Trust Boundary/ Internes Netzwerk",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": -40,
+              "y": 60
+            },
+            "size": {
+              "width": 1330,
+              "height": 760
+            },
+            "shape": "trust-boundary-box",
+            "attrs": {
+              "headerText": {
+                "text": "Trust Boundary/LDAP-Administratoren"
+              }
+            },
+            "zIndex": -1,
+            "id": "4b259b82-74a3-48f5-a4eb-cf5cedd5ea89",
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "Trust Boundary/LDAP-Administratoren",
+              "description": "Innerhalb der Vertauensgrenze Admin BereichB",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 1130.25,
+              "y": 550.0000000000002
+            },
+            "size": {
+              "width": 280,
+              "height": 230
+            },
+            "shape": "trust-boundary-box",
+            "attrs": {
+              "headerText": {
+                "text": "DMZ- Demilitarisierte Zone"
+              }
+            },
+            "zIndex": -1,
+            "id": "bc4563a6-25aa-48d3-831f-3ea30c1126dc",
+            "data": {
+              "type": "tm.BoundaryBox",
+              "name": "DMZ- Demilitarisierte Zone",
+              "description": "Die DMZ grent das Interne Netzwerk von dem Externen Netzwerk ab.",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            }
+          },
+          {
+            "position": {
+              "x": 1100,
+              "y": 460
+            },
+            "size": {
+              "width": 60,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Snort"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 1,
+            "id": "9e4a5a29-ad05-4f7d-ac01-f53c76f74c3c",
+            "data": {
+              "type": "tm.Process",
+              "name": "Snort",
+              "description": "Überwacht Netzwekverkehr auf verdächtige Aktivitäten.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "1d9fbcf0-aea6-4e32-b8c4-cf679d2515d4",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Angreifer könnten die Snort Konfiguration ändern oder die Protokolle manipulieren.",
+                  "mitigation": "Regelmäßige Integrationsprüfungen der Konfigurationsdateien.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 15,
+                  "score": "6"
+                },
+                {
+                  "id": "93e5e9e5-97ea-4c36-8d75-2a5e4e4759d7",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten Snort mit übermäßgem Datenverkehr überlasten.",
+                  "mitigation": "Kapazitätsplanung und Ressourcenüberwachung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 16,
+                  "score": "6"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1220,
+              "y": 220
+            },
+            "size": {
+              "width": 140,
+              "height": 170
+            },
+            "attrs": {
+              "text": {
+                "text": "ClamAV &\nClamAV-Daemon"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 2,
+            "id": "1640b94c-3ec1-4d73-913a-0dcdf169c3bf",
+            "data": {
+              "type": "tm.Process",
+              "name": "ClamAV &\nClamAV-Daemon",
+              "description": "Echtzeit- und Gepannte Scnas des Systems auf Maleware.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "cad1c4f5-1e8d-4b29-8fa0-15ab03081854",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Maleware könnte die Virenidentifikationsdateien modifizieren,",
+                  "mitigation": "Regelmäßige Updates und  Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 12,
+                  "score": "7"
+                },
+                {
+                  "id": "4d8f1c14-303d-4265-b344-4640aeb816af",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung des Scanner-Services durch zu viele Anfragen.",
+                  "mitigation": "Ressourcenüberwachung, Limitierungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 13,
+                  "score": "6"
+                },
+                {
+                  "id": "85bacc4c-bfc5-4a5c-a888-fefa49bbc3f2",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Elevation of privilege",
+                  "description": "Angreifer könnten Administrative Berechtigungen auf dem System erhalten.",
+                  "mitigation": "Eingeschränkte Benutzerechte, regelmäßige Sicherheitsaudits.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 14,
+                  "score": "6"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 905,
+              "y": 315
+            },
+            "size": {
+              "width": 170,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "Log-Dateien"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 3,
+            "id": "cfc2eb8a-119a-4262-b859-8b209796707b",
+            "data": {
+              "type": "tm.Store",
+              "name": "Log-Dateien",
+              "description": "Speichern Protokolle für sicherheitsrelevante Ereignisse.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isALog": true,
+              "isEncrypted": false,
+              "isSigned": true,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": [
+                {
+                  "id": "34e41308-2653-4ff6-b229-157180659682",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der Log-Dateien zur Spurenverwischung.",
+                  "mitigation": "Unveränderliche /Schreibgeschütze= Log-Server, regelmäßige Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 31,
+                  "score": "7"
+                },
+                {
+                  "id": "ddc7e2a4-381e-48fa-9c14-23655dc147e9",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Unbefugte könnten Zugriff auf sensible Informationen in den Log-Dateien erlangen.",
+                  "mitigation": "Zugriffskontrollen und Datenverschlüsselung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 32,
+                  "score": "7"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 470,
+              "y": 460
+            },
+            "size": {
+              "width": 240,
+              "height": 190
+            },
+            "attrs": {
+              "text": {
+                "text": "LDAP-Datenbank"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 4,
+            "id": "f734a8ea-7f05-4e75-a34e-852375dbb80d",
+            "data": {
+              "type": "tm.Store",
+              "name": "LDAP-Datenbank",
+              "description": "Speichert LDAP-Informatonen und Berechtigen",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": true,
+              "storesInventory": false,
+              "threats": [
+                {
+                  "id": "662144db-ede3-4cc9-b9f9-8beb16082df3",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Unbefugte Änderungen an den gespeicherten Daten in der Datenbank.",
+                  "mitigation": "Zugriffskontrollen, regelmäßige Backups und Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 28,
+                  "score": "8"
+                },
+                {
+                  "id": "35806c67-815b-4184-aa67-cfc8aa1cd227",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Daten der LDAP-Datenbank könnten offen gelegt werden.",
+                  "mitigation": "Datenverschlüsselung und Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 29,
+                  "score": "8"
+                },
+                {
+                  "id": "cfb436f0-f191-46ec-b43d-193cb6fbeb0b",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten die Verfügbarheit der Datenbank beeinträchtigen.",
+                  "mitigation": "Überwachung und Ressourcenmanagement.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 30,
+                  "score": "6"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1030,
+              "y": 170
+            },
+            "size": {
+              "width": 60,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Suricata"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 6,
+            "id": "cb039b32-e36d-4fb6-b921-8ce4d1c5edf0",
+            "data": {
+              "type": "tm.Process",
+              "name": "Suricata",
+              "description": "Netzwerküberwachung und tiefergehende Analyse.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "a5891d55-b333-4f22-ad1b-756480ad0ee5",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Unbefugte Änderungen an den Regeln könnten vorgenommen werden.",
+                  "mitigation": "Schutzeinstellungen für Konfigurationsdateien, regelmäßige Überprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 17,
+                  "score": "6"
+                },
+                {
+                  "id": "cc2f45a0-a271-4a4d-ab16-eedd2599948c",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten den Netzwerkverkehr so beeinflussen, dass Suricata funktionsunfähig wird.",
+                  "mitigation": "Lastenausgleich und redundante Systeme.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 18,
+                  "score": "6"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1010,
+              "y": 500
+            },
+            "size": {
+              "width": 90,
+              "height": 70
+            },
+            "attrs": {
+              "text": {
+                "text": "Fail2Ban"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 7,
+            "id": "52a0b472-7c47-4ab2-a105-519af5937fbe",
+            "data": {
+              "type": "tm.Process",
+              "name": "Fail2Ban",
+              "description": "Verhindert Brute-Force-Angriffe durch IP-Sperrung.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "b4029a0f-a96f-4f9a-b42f-fd985d3ef1ec",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten Brute-Force-Angriffe versuchen um Sperrung zu umgehen.",
+                  "mitigation": "Überwachung und Anpassung der Sperregeln, Nutzung von Ratelimits.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 19,
+                  "score": "5"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 950,
+              "y": 110
+            },
+            "size": {
+              "width": 60,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "rkhunter"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 8,
+            "id": "1dd20fe2-b5a2-4969-b094-faf3dff01fbb",
+            "data": {
+              "type": "tm.Process",
+              "name": "rkhunter",
+              "description": "Überprüfung des Systems auf Rootkits.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "43d3be09-0860-4ad2-ba1e-b4a49eee2386",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Angreifer könnten die rkhuter-Konfigurationsdateien ändern oder die Scans manipulieren.",
+                  "mitigation": "Integriätsprüfunegn der Kofigurationsdaten, Logging aktivieren.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 20,
+                  "score": "6"
+                },
+                {
+                  "id": "fe990d54-da67-4712-8288-69b3501c9417",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung des rkhunter services durch zu viele Anfragen.",
+                  "mitigation": "Regelmäßige Wartung und Überwachung der Systemressourcen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 21,
+                  "score": "5"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1160,
+              "y": 390
+            },
+            "size": {
+              "width": 90,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "UFW\nFirewall"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 9,
+            "id": "74b6cd07-ba40-468a-9d2e-accc7760fd48",
+            "data": {
+              "type": "tm.Process",
+              "name": "UFW\nFirewall",
+              "description": "Steuert und filteret Netzwerkzugriffe.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "4354a2b0-9366-460d-968c-44176a98783a",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Änderung der bestehenden Firewallregeln durch Unbefugte, um Zugang zu erlangen.",
+                  "mitigation": "Zugriffsbeschränkungen- und Kontrollen für Firewall-Konfiguration, Logging aktivieren.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 22,
+                  "score": "6"
+                },
+                {
+                  "id": "373144e9-472e-4cc5-825a-028fdd68036d",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung der Firewall durch übermäßiges Verbindeungsaufkommen.",
+                  "mitigation": "Überwachung und Begrenzung der Verbindungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 23,
+                  "score": "6"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1100,
+              "y": 185
+            },
+            "size": {
+              "width": 90,
+              "height": 140
+            },
+            "attrs": {
+              "text": {
+                "text": "AppArmor"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 10,
+            "id": "0e889c10-35b7-4b6b-bb7f-6b8c2696684f",
+            "data": {
+              "type": "tm.Process",
+              "name": "AppArmor",
+              "description": "Beschränkt den Zugriff auf Systemdienste.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "953fc2ac-c588-41d5-99b8-7f1ded0ff16f",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Manipulation der AppArmor-Profile durch unbefugte zur Erlangung von Zugriffsberechtigungen.",
+                  "mitigation": "Regelmäßige Überprüfungen sowie Audits der profile.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 24,
+                  "score": "6"
+                },
+                {
+                  "id": "58768381-26e0-4b20-b9b8-be3426ede5dd",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Elevation of privilege",
+                  "description": "Angeriferkönnte die Rechte bestimmter Prozesse erhöhen.",
+                  "mitigation": "Strikte Zuweisung von Rechten und Rollenkontrolle.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 25,
+                  "score": "7"
+                }
+              ]
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bideirektionaler Datenfluss zwischen der LDAP-Datenbank und den LDAP-Diensten.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "77db287e-2b4b-4f52-8a6e-7931082c3946",
+            "source": {
+              "cell": "f734a8ea-7f05-4e75-a34e-852375dbb80d"
+            },
+            "target": {
+              "cell": "c23d6cd5-53bd-4508-903f-a8501275a555"
+            },
+            "vertices": [
+              {
+                "x": 590,
+                "y": 340
+              },
+              {
+                "x": 680,
+                "y": 340
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von den Log-Dateien zu den Wazuh-Agents.",
+              "outOfScope": true,
+              "reasonOutOfScope": "Wazuh-Angent ist nioch nicht Implementiert, da er nicht Teil dieses Projekts ist.",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "acff0c73-7011-4b04-a6b6-80a0ad83f62e",
+            "source": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            },
+            "target": {
+              "x": 868,
+              "y": 610
+            },
+            "vertices": [
+              {
+                "x": 868,
+                "y": 520
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaler Datenfluss aus externen Quellen zum VPN-Server.",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der VPN-Server wird als gegeben betrachtet und ist niocht Teil dieses Projekts",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "df2057d8-b73c-44b0-a1eb-0dea42e69b96",
+            "source": {
+              "x": 1400,
+              "y": 540
+            },
+            "target": {
+              "cell": "39efded3-02d9-4eb6-861d-dc992d44cfb7"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der als gegeben ",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "670b2782-954b-4c24-86cd-819ded1b8e24",
+            "source": {
+              "x": 1145,
+              "y": 655
+            },
+            "target": {
+              "cell": "c23d6cd5-53bd-4508-903f-a8501275a555"
+            },
+            "vertices": [
+              {
+                "x": 860,
+                "y": 460
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von den Backup-Daten zum Backup-Server",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der Backup-Server ist nicht Teil dieses Projekts und noch nicht implementiert,",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "f5c22316-9afc-4d94-a04e-0a39343c924d",
+            "source": {
+              "x": 250,
+              "y": 795
+            },
+            "target": {
+              "cell": "f9588e9d-a026-4070-beeb-7b87d4b1751d"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bidirektionaller Datenfluss zwischen Externen Anwendern und dem Webserver.",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der Webserver ist nicht Teil dieses Projekts",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "b7e623f4-2ce5-4b89-bf35-ba532e788aef",
+            "source": {
+              "x": 1510,
+              "y": 540
+            },
+            "target": {
+              "cell": "670247e8-6196-4166-bd70-ca65496168a6"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Der Wazuh-Server empfängt Ereignisdaten und sendet Konfigurationsbefehle an die Wazuh-Agents zurück.",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der Wazuh-Server ist nicht Teil dieses Projekts.",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "80345efc-0d7d-491c-a706-759a72d4fa84",
+            "source": {
+              "x": 970,
+              "y": 650
+            },
+            "target": {
+              "cell": "7efcc21f-1677-4951-bcd0-6089c485e567"
+            },
+            "vertices": [
+              {
+                "x": 950,
+                "y": 690
+              },
+              {
+                "x": 860,
+                "y": 690
+              },
+              {
+                "x": 920,
+                "y": 735
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss der Web-Server Nutzer zur Autentifikation in der LDAP-Domäne. ",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der Webserver ist nicht Teil diesers Projektes und noch nicht in die Domäne integriert.",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "2dce260e-ccf5-49fc-9967-683f925fe1c2",
+            "source": {
+              "x": 1210,
+              "y": 705
+            },
+            "target": {
+              "cell": "c23d6cd5-53bd-4508-903f-a8501275a555"
+            },
+            "vertices": [
+              {
+                "x": 840,
+                "y": 480
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "id": "5017f648-2766-4fdf-bac3-a04061290b3d",
+            "source": {
+              "x": 807,
+              "y": 765
+            },
+            "target": {
+              "cell": "96c76e95-f431-4117-ba8c-184729b162bc"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bidirektionaler Datenfluss zwischen SSH-Dienst und Benutzern/Clients",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "c9640955-8b28-421e-935e-5004c49d11c0",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der SSH-Verbindung, um unberechtigten Zugang zu erhalten oder Befehle auszuführen.",
+                  "mitigation": "SSH mit modernen Verschlüsselungsalgorithmen wie AES oder RSA.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 43,
+                  "score": "7"
+                },
+                {
+                  "id": "f5e6c9c4-445f-41c9-bd6a-4e90a74d09f8",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Daten könnten duch unsichere SSH-Verbindung offengelegt werden.",
+                  "mitigation": "Eindatz von sicheren Verschlüsselungsprotokollen wie AES oder RSA.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 44,
+                  "score": "7"
+                },
+                {
+                  "id": "6fa6aa55-2c9f-4851-840d-dd874f30351b",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung des SSH-Dienstes durch Brute-Force-Angriffe oder zu viele Verbindungsanfragen.",
+                  "mitigation": "Fail2Ban, UFW-Konfiguration, Rate-Limeting.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 45,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "69572700-3690-42a3-9a5e-09f5f84070f3",
+            "source": {
+              "x": 203,
+              "y": 200
+            },
+            "target": {
+              "cell": "a67ef182-2cef-4bb0-a845-049ee927c034"
+            },
+            "vertices": [
+              {
+                "x": 340,
+                "y": 260
+              },
+              {
+                "x": 280,
+                "y": 280
+              },
+              {
+                "x": 280,
+                "y": 300
+              },
+              {
+                "x": 350,
+                "y": 300
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von den LDAP-Diensten zu den Log-Dateien",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "ac061dff-04cc-4754-8e4f-4f265402bb3a",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der Logs, um LDAP-Aktionen zu verbergen oder zu fälschen.",
+                  "mitigation": "Logs auf Remote-Server speichern, regelmäßige Integritätschecks.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 48,
+                  "score": "7"
+                },
+                {
+                  "id": "a5b95843-6a9d-4de8-b0dd-d0f58a2f50c0",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "Sensible Informationen aus LDAP-Anfragen könnten die Log-Dateien offengelegt werden.",
+                  "mitigation": "Verschlüsselung der Logs, Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 49,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "dfd6403d-4a46-4423-b9c2-308c20ad5709",
+            "source": {
+              "x": 768,
+              "y": 245
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            },
+            "vertices": [
+              {
+                "x": 810,
+                "y": 245
+              },
+              {
+                "x": 810,
+                "y": 380
+              },
+              {
+                "x": 860,
+                "y": 340
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaler Datenfluss von dem BorgBackup-Prozess zu den Backup Daten",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "f2c0ec67-7ceb-4b79-b8b4-45a5ca4f29d1",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Unbefugte könnten Backup-Daten könnten Backup-Daten oder löschen.",
+                  "mitigation": "Verschlüsslung und regelmäßige Überprüfung der Backup-Integrität.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 50,
+                  "score": "8"
+                },
+                {
+                  "id": "c22052e2-cd63-4406-b634-3893e2a1fb48",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Backup-Daten könnten sensible Informationen enthalten, welche offengelegt werden könnten.",
+                  "mitigation": "Verschlüsselung der Backup-Daten, Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 51,
+                  "score": "8"
+                },
+                {
+                  "id": "3e0a11b0-0e8c-4f25-9dab-aef8261a7bec",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung des Backup-Dienstes, um den Sicherungsprozess zu verhindern oder zu verlangsamen.",
+                  "mitigation": "Ressourcenmanagement, Rate-Limiting.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 52,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "b90c8d2e-1a2d-44f0-856d-6ba2b9bab6f7",
+            "source": {
+              "x": 176,
+              "y": 390
+            },
+            "target": {
+              "cell": "a0018280-756b-455c-89fa-b1e1323e6e52"
+            },
+            "vertices": [
+              {
+                "x": 240,
+                "y": 410
+              },
+              {
+                "x": 310,
+                "y": 430
+              },
+              {
+                "x": 150,
+                "y": 430
+              },
+              {
+                "x": 210,
+                "y": 460
+              },
+              {
+                "x": 210,
+                "y": 490
+              },
+              {
+                "x": 170,
+                "y": 520
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss des BorgBackup-Prozesses zu den Log-Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "57356393-8a17-4ef9-b6c9-6e6945ff0b08",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Unbefugte Änderungen der Logs, um Aktionen zu verschleiern oder zu fälschen.",
+                  "mitigation": "Log-Signierung auf unveränderlichen Systemen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 53,
+                  "score": "7"
+                },
+                {
+                  "id": "a5d12ce1-a096-4eb6-91ae-2c73e8a96330",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "Sensible Informationen könnten in Log-Dateien des Backup-Prozesses offengelegt werden.",
+                  "mitigation": "Verschlüsselung und Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 54,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "104e54bd-d9d1-4843-ad3d-03c0b10d83bb",
+            "source": {
+              "x": 216,
+              "y": 371
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            },
+            "vertices": [
+              {
+                "x": 540,
+                "y": 440
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bidirektional Datenfluss zwischen SSH-Dienst und Administrator.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "ea6e7ee7-ea37-4386-a308-590a3ef1c2cb",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der SSH-Sitzung durch den Administrator oder Angreifer, um unautorisierte Befehle auszuführen.",
+                  "mitigation": "Nutzung von MFA, SSH mit modernen Verschlüsslungsmethoden.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 55,
+                  "score": "8"
+                },
+                {
+                  "id": "cb8d1bd1-c61c-4a64-b0b8-eb053e867a3b",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Abfangen von sensiblen Informationen, z.B. Anmeldedaten oder Befehle, durch unsichere SSH-Kommunikation.",
+                  "mitigation": "Sichere Protokolle vie AES oder SSH zur Verschlüsselung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 56,
+                  "score": "8"
+                },
+                {
+                  "id": "54bef6c0-f54e-4330-a93b-db8c48c005c4",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Überlastung des SSH-Dienstes durch übermäßige Anfragen oder Brute-Force-Angriffe.",
+                  "mitigation": "Fail2Ban, UFW-Konfiguration, Ressourcenmanagement.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 58,
+                  "score": "7"
+                }
+              ]
+            },
+            "id": "f0de5774-2404-45ab-94b4-cf5fdcd59649",
+            "source": {
+              "x": 233,
+              "y": 185
+            },
+            "target": {
+              "cell": "b82bd248-dfb1-4cd6-b964-8250445f8051"
+            },
+            "vertices": [
+              {
+                "x": 310,
+                "y": 185
+              },
+              {
+                "x": 310,
+                "y": 135
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaler Datenfluss vom Administrator zur LDAP-Datenbank.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "d170279e-753c-4c08-b35a-bfcdc0f46e2a",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der LDAP-Datenbank durch unbefugte Änderungen, um z.B. Verzeichnisdaten oder Berechtigungen zu ändern.",
+                  "mitigation": "Zugriffskontrollen , regelmäßige Backupsund Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 59,
+                  "score": "8"
+                },
+                {
+                  "id": "2881c6e0-a7da-4c45-a036-9c9d6e3d46d7",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Daten in der LDAP-Datenbank könnten offengelegt werden, z.B. durch ungesicherte Zugriffe des Administrators.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 60,
+                  "score": "8"
+                },
+                {
+                  "id": "9430a22a-c63a-450f-b8ed-5ec80fefd1d0",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten durch übermäßige Anfragen oder gezielte Angriffe auf den Administrator die LDAP-Datenbank lahmlegen.",
+                  "mitigation": "Überwachung und Ressourcenmanagement.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 61,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "d38b61fc-29dd-409f-b799-5c41866ceef9",
+            "source": {
+              "x": 435,
+              "y": 185
+            },
+            "target": {
+              "cell": "f734a8ea-7f05-4e75-a34e-852375dbb80d"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von dem SSH-Dienst zu den Log Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "f5ce1aac-1dda-43b4-8d73-520fee578f2f",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der Log-Dateien, um Aktionen zu verschleiern oder falsche Informationen zu erzeugen.",
+                  "mitigation": "Unveränderliche Log-Server, Signierung der Logs.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 46,
+                  "score": "7"
+                },
+                {
+                  "id": "88a1c972-c862-482d-9cc3-32fa85d7851b",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Unbefugter Zugriff auf Log-Dateien und Einsicht in sensible Informationen.",
+                  "mitigation": "Verschlüsselung der Logs, Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 47,
+                  "score": "7"
+                }
+              ]
+            },
+            "id": "885affe0-bba4-4a6f-8055-f1612dd16d22",
+            "source": {
+              "x": 226,
+              "y": 190
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            },
+            "vertices": [
+              {
+                "x": 530,
+                "y": 230
+              },
+              {
+                "x": 660,
+                "y": 70
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bidirektionaller Datenfluss zwischen dem Administrator und den LDAP-Diensten.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "4d320ec7-4ac6-42cf-9084-e0e7a840a09c",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der Informationen, die von den LDAP-Diensten an den Administrator übermittelt werden.",
+                  "mitigation": "Integritätsschutz durch Verschlüsselung und Protokollierung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 62,
+                  "score": "7"
+                },
+                {
+                  "id": "4094bcdb-3cde-4ea2-a58c-aca17b7a777a",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Der Administrator-Account könnte auf vertrauliche LDAP-Daten zugreifen.",
+                  "mitigation": "Zugriffsrichtlinien, Datenverschlüsselung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 63,
+                  "score": "8"
+                },
+                {
+                  "id": "9c2761d7-ccab-4b09-9f60-b57a2ed0dc59",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Durch unzureichend gesicherte LDAP-Dienstes könnte der Administrator den Zugriff auf Verwaltungsfunktionen verlieren.",
+                  "mitigation": "Überwachung und Schutz der Dienste vor Überlastungen",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 64,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "53ac79bc-0415-478d-bf10-57874efbca63",
+            "source": {
+              "x": 518,
+              "y": 130
+            },
+            "target": {
+              "cell": "c23d6cd5-53bd-4508-903f-a8501275a555"
+            },
+            "vertices": [
+              {
+                "x": 650,
+                "y": 130
+              },
+              {
+                "x": 680,
+                "y": 180
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bidirektionaller Datenfluss zwischen den Benutzern/Clients und den LDAP-Diensten.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "ce9c6c5f-64de-4677-b27e-a8df137ca04e",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation von LDAP-Anfragen durch Man-in-the-Middle Angriffe.",
+                  "mitigation": "TLS-Verschlüsselung, sichere Verbindungsprotokolle.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 39,
+                  "score": "7"
+                },
+                {
+                  "id": "d164fea7-2d64-4d85-8b18-451679246448",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Manipulation von LDAP-Daten könnten durch unsichere Kommunikation mit dem Client abgefangen werden.",
+                  "mitigation": "TLS- oder SSL Verschlüsselung für die Datenübertragung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 41,
+                  "score": "7"
+                },
+                {
+                  "id": "f24a9d4d-37ee-4d5d-85c4-bcbc1898007e",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung der LDAP-Dienste durch zu viele Anfragen.",
+                  "mitigation": "Implementierung von Rate-Limitierung und Ressourcenüberwachung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 42,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "058ff149-b176-4256-98f0-9eb8db6fddb4",
+            "source": {
+              "x": 447,
+              "y": 355
+            },
+            "target": {
+              "cell": "c23d6cd5-53bd-4508-903f-a8501275a555"
+            },
+            "vertices": [
+              {
+                "x": 500,
+                "y": 355
+              },
+              {
+                "x": 500,
+                "y": 300
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bidirektionaler Datenflus zwischen SSH-Dienst und dem BorgBackup-Prozess.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "65c39c11-7082-46c7-afa9-776bb4e00527",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der Backups der Backups über eine kompromitiere SSH-Verbindung, um die Daten zu verändern oder zu löschen.\n\n",
+                  "mitigation": "SSH mit starker Verschlüsselung, MFA für SSH-Zugänge, Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 65,
+                  "score": "8"
+                },
+                {
+                  "id": "f9a92ef4-6c98-4fb3-b17d-a3446563ebc7",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulierte Daten könnten vom Backup-Prozess an den SSH-Dienst übermittelt werden, was zu falschen oder beschädigten Backups führt.",
+                  "mitigation": "Datenintegritätsprüfungen, Verschlüsselung und Protokiolierung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 66,
+                  "score": "7"
+                },
+                {
+                  "id": "50dbf34c-d6a6-487f-9376-a3656cafd746",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Der Backup-Prozess könnte sensible Daten an den SSH-Dienst weitergeben, die dann unsachmenäß geschützt oder offengelegt werden.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 68,
+                  "score": "8"
+                },
+                {
+                  "id": "19f6dbf9-0c5e-4711-9d82-eeeda9f60e9f",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Ein Überlastungsangriff auf den Backup-Prozess könnte die Backups lahmlegen und die Wiederherstellung von Systemdaten behindern.",
+                  "mitigation": "Ressourcenüberwachung und- management,  Schutz vor Überlstungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 69,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "7b3efc80-cd98-4d86-ac34-65a69bc3e941",
+            "source": {
+              "x": 199,
+              "y": 200
+            },
+            "target": {
+              "cell": "5207409d-fe03-4ee9-9de0-28490e216894"
+            },
+            "vertices": [
+              {
+                "x": 150,
+                "y": 230
+              },
+              {
+                "x": 60,
+                "y": 230
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von ClamAV und ClamAV-Daemon zu den Log-Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "027007de-d211-4d24-9213-e029ad420ebc",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Ein Angreifer könnte versuchen, die Log-Einträge von ClamAV zu manipulieren, um die Erkennung von Maleware zu behindern.",
+                  "mitigation": "Unveränderliche Log-Server, Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 70,
+                  "score": "8"
+                },
+                {
+                  "id": "40228f4c-8cb1-44b5-ac72-d3627eb46103",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Informationen über erkannte Bedrohungen könnten in Log-Dateien ungeschützt sein un von unbefugten Nutzern abgerufen werden.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 71,
+                  "score": "7"
+                },
+                {
+                  "id": "da3ca866-bc40-4fd1-b5d2-cf522cfcfbe3",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Übermäßige Log-Einträge könnten die Systemressourcen überlasten und die Leistung von ClamAV beeinträchtigen.",
+                  "mitigation": "Regelmäßige Überprüfungen und Ressourcenmanagement.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 72,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "b5ac911d-8f06-4294-9793-0cc29b6260bd",
+            "source": {
+              "x": 1230,
+              "y": 335
+            },
+            "target": {
+              "x": 1090,
+              "y": 360
+            },
+            "vertices": [
+              {
+                "x": 1130,
+                "y": 360
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von Snort zu den Log-Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "7ce2d5bf-78e1-40eb-914f-a02878aef094",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Angreifer könnten versuchen, Snort-Log Dateien zu manipulieren, um Sicherheitsverletzungen zu verbergen.",
+                  "mitigation": "Unveränderliche Log-Server, regelmäßige Überprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 73,
+                  "score": "8"
+                },
+                {
+                  "id": "541bf921-c97f-4577-b780-5a329f4298d7",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Informationen über Netzwerkverkehr und erkannte Angriffe könnten in Log-Dateien offengelegt werden.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 74,
+                  "score": "7"
+                },
+                {
+                  "id": "0760b95e-102d-46f5-ae77-a1bedbf178ef",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten versuchen, Snort zu überlasten, was zu einem Verlust an Protokollierungsfunktionen führen könnte.",
+                  "mitigation": "Ressourcenmanagemt und Überwachung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 75,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "cf284f8a-2a51-41c5-86ea-b2937aeef1d2",
+            "source": {
+              "x": 1110,
+              "y": 470
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von Suricata zu den Log-Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "47481e97-6b00-4de2-bee2-da8568bd3d3a",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der von Suricata erzeugten Logs durch Angreifer, um Sicherheitsereignisse zu verbergen.",
+                  "mitigation": "Unveränderliche Log-Server, regelmäßige Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 76,
+                  "score": "8"
+                },
+                {
+                  "id": "d3b7d514-c466-427d-8e55-7579265f3a43",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Informationen über erkannte Angriffe könnten in Log-Dateien sichtbar sein. ",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 77,
+                  "score": "7"
+                },
+                {
+                  "id": "ac98334a-68b5-4a94-9321-2b30f5decc19",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung durch zu viele Log-Einträge könnte die Effizienz von Suricata beeinträchtigen.",
+                  "mitigation": "Ressourcenmanagement und Überwachung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 78,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "1dd8c131-887d-4217-8550-dfe8dc7323ba",
+            "source": {
+              "x": 1060,
+              "y": 230
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von rkhunter zu den Log-Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "85fd44bd-9ee7-43a7-9307-c403fa0ed0fa",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Ein Angreifer könnte versuchen, die von RkHunter erstellten Log-Dateien zu manipulieren, um Hinweise auf Rootkits oder Backdoor-Prozesse zu verbergen.",
+                  "mitigation": "Unveränderliche Log-Server, regelmäßige Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 79,
+                  "score": "8"
+                },
+                {
+                  "id": "51649cb4-802e-40b5-9cf5-9ba57d273b25",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Log-Dateien könnten sensible Informationen über das System enthalten, welche Angreiffern unbefugten Zugriff ermöglichen.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 80,
+                  "score": "7"
+                },
+                {
+                  "id": "4b0a1052-027c-4b19-8392-06d0121585a6",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Hohe Log-Generierung könnte die Systemressourcen beanspruchen und den Betrieb von RkHunter beeinträchtigen.",
+                  "mitigation": "Überwachung und Ressourcenmanagement.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 81,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "14f5523c-bbb6-4216-8d59-4cd10ffda073",
+            "source": {
+              "x": 980,
+              "y": 170
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von AppArmor zu den LogDateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "5c994313-c62b-4b27-8e30-2205124c1d80",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation von AppArmor-Log-Dateien um Sicherheitsverletzungen oder Fehlkonfiguration zu verbergen.",
+                  "mitigation": "Unveränderliche Log-Server, Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 82,
+                  "score": "8"
+                },
+                {
+                  "id": "4f729a32-f867-48d1-9466-e696ad307ab8",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Log-Dateien könnten vertrauliche Informationen über die Sicherheitsrichtlinien und die Systemkonfiguration enthalten.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 83,
+                  "score": "7"
+                },
+                {
+                  "id": "2dcc6ed6-62b2-4260-b914-14df6cae2ff2",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angriffe könnten darauf abzielen, die Protokollierungsressourcen von AppArmor zu überlasten, was zu einem Verlust der Sichtbarkeit führen kann.",
+                  "mitigation": "Ressourcenmanagement und Überwachung",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 84,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "dbb2f7f4-5e09-4b50-8c1c-eb79aed2c07f",
+            "source": {
+              "x": 1150,
+              "y": 300
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von der UFW-Firewall zu den Log-Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "a46184ed-5602-429a-a61e-4a6bcf4343c3",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Ein Angreifer könnte versuchen, die von UFW generierten Log-Einträge zu manipulieren, um unbefugte Zugriffsversuche zu verschleiern.",
+                  "mitigation": "Unveränderliche Log-Server, regelmäßige Integritätsprüfungen",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 85,
+                  "score": "8"
+                },
+                {
+                  "id": "d5d99e92-f405-4514-80a0-8efd8d11dfc8",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Unbefugte könnten Zugang zu Log-Dateien erhalten, die sensible Informationen über Netzwerkverbindungen enthalten.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkunge",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 86,
+                  "score": "7"
+                },
+                {
+                  "id": "6eb0780e-5bc1-4908-bcf7-3279470fc0c3",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten versuchen, UFW mit einer Flut von Verbindungsversuchen zu überlasten, was zu einer Unterbrechung der Protokollierung führen könnte.",
+                  "mitigation": "Ressourcenmanagement und Überwachung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 87,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "1eb338de-ef96-4941-bf91-6ff11d15d5e9",
+            "source": {
+              "x": 1160,
+              "y": 440
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            }
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von Fail2Ban zu den Log-Dateien.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "47ce38fd-524d-4a0e-b22a-38e35a26c159",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der von Fail2Ban erstellten Log-Einträge durch einen Angreifer, um wiederholte Angriffsversuche zu verbergen.",
+                  "mitigation": "Unveränderliche Log-Server, regelmäßige Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 88,
+                  "score": "8"
+                },
+                {
+                  "id": "c5a4ba02-b19a-4023-bcbe-e7af13645fbc",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Informationen über blockierte IPs oder Sicherheitsereignisse könnten in Log-Dateien ungeschützt sein.",
+                  "mitigation": "Datenverschlüsselung und Zugriffsbeschränkungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 89,
+                  "score": "7"
+                },
+                {
+                  "id": "6b2e9cdf-c3cc-402e-9d83-473fab0263f4",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten versuchen, die Protokollierung von Fail2Ban zu überlasten, wodurch wichtige sicherheitsrelevante Ereignisse verloren gehen könnten.",
+                  "mitigation": "Ressourcenmanagement und Überwachung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 90,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "6ec98c8d-22fe-4801-b5aa-02fe3266c3c3",
+            "source": {
+              "x": 1040,
+              "y": 505
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            },
+            "vertices": [
+              {
+                "x": 1040,
+                "y": 480
+              },
+              {
+                "x": 1010,
+                "y": 430
+              }
+            ]
+          },
+          {
+            "position": {
+              "x": 637.9999999999998,
+              "y": 190
+            },
+            "size": {
+              "width": 130,
+              "height": 130
+            },
+            "attrs": {
+              "text": {
+                "text": "LDAP-Diesnte"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 11,
+            "id": "c23d6cd5-53bd-4508-903f-a8501275a555",
+            "data": {
+              "type": "tm.Process",
+              "name": "LDAP-Diesnte",
+              "description": "Verarbeitet Authentifizieungs- und Verzeichnisanfragen.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "d9365edf-e402-43bb-9531-89b18c2cdb46",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Angreifer könnten sich als legitime Benutzer ausgeben.",
+                  "mitigation": "Provide remediation for this threat or a reason if status is N/ANutzung von sicheren Passwörtern, MFA, TLS-Verschlüsselung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 3,
+                  "score": "8"
+                },
+                {
+                  "id": "5c9238cb-32bd-46b8-864b-6e08c18841cb",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Unbefugte Änderungen an LDAP-Daten könnten vorgenommen werden.",
+                  "mitigation": "Berechtigungen und Zugriffsrechte beschränken, Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 4,
+                  "score": "8"
+                },
+                {
+                  "id": "c455ff61-89e3-4b0b-9cb4-29fca505a17e",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Repudiation",
+                  "description": "Benutzer könnte Aktionen leugnen, welche er am LDAP-Dienst durchgeführt hat.",
+                  "mitigation": "Umfassendes Logging, Benutzerkontenaktivitäten protokollieren.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 6,
+                  "score": "7"
+                },
+                {
+                  "id": "7480b522-f0e6-45bd-9b5e-47a188736637",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Daten im LDAP könnten offen gelegt werden.",
+                  "mitigation": "Provide remediation for this threat or a reason if status is N/AZugriffskontrollen, Datenverschlüsselung, Anonymisierung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 7,
+                  "score": "8"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 140,
+              "y": 100
+            },
+            "size": {
+              "width": 110,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "SSH-Dienst"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 12,
+            "id": "a935b4e6-cc83-4404-8b87-0ab8aac34360",
+            "data": {
+              "type": "tm.Process",
+              "name": "SSH-Dienst",
+              "description": "Ermöglicht Remote-Verwaltung über gesicherte Kanäle.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "b6055c00-2e7e-4d33-8be9-0d3e170746b7",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Angreifer könnten sich als Administrator ausgeben und Zugriff erhalten.",
+                  "mitigation": "Nutzung von Public-Key Authentifizierung und MFA. ",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 8,
+                  "score": "8"
+                },
+                {
+                  "id": "d9d5150d-0cb7-4bf0-ac9a-f11850ee690e",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Daten könnten während der Übertragung modifiziert werden.",
+                  "mitigation": "SSH mit starken Verschlüsslungskomponenten konfigurieren.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 9,
+                  "score": "7"
+                },
+                {
+                  "id": "35de01ba-ec32-4867-beb7-0074f0c76dd1",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten den SSH-Dienst durch Flooding angreifen. ",
+                  "mitigation": "Fail2Ban für IP-Sperrung, Rate Limiting.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 10,
+                  "score": "6"
+                },
+                {
+                  "id": "f8857540-f5a3-4851-a24e-14ff2ff355f9",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Elevation of privilege",
+                  "description": "Angrifer könnten unbefugte Administrative Berechtigungen erlangen.",
+                  "mitigation": "Minimize Privileges, strenge Zugriffssteuerung.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 11,
+                  "score": "7"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 100,
+              "y": 260
+            },
+            "size": {
+              "width": 140,
+              "height": 130
+            },
+            "attrs": {
+              "text": {
+                "text": "BorgBackup"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 13,
+            "id": "5207409d-fe03-4ee9-9de0-28490e216894",
+            "data": {
+              "type": "tm.Process",
+              "name": "BorgBackup",
+              "description": "Führt Backups durch und überprüft deren Integrität.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": [
+                {
+                  "id": "130ba702-8be6-4fec-aa62-b74c94cc8bd0",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Angreifer könnten Backup-Daten verfälschen oder löschen.",
+                  "mitigation": "Verschlüsselung der Backups, regelmäßge Integritätsprüfungen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 26,
+                  "score": "7"
+                },
+                {
+                  "id": "af0f9ebe-99f5-400f-996c-bd077b5cf29e",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Übermäßige Anfragen könnten den BAckup-Dienst überlasten.",
+                  "mitigation": "Ressourcenmanagement und Limits für Anfragen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 27,
+                  "score": "6"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 85,
+              "y": 675.0000000000031
+            },
+            "size": {
+              "width": 170,
+              "height": 120
+            },
+            "attrs": {
+              "text": {
+                "text": "Backup-Daten"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 14,
+            "id": "a0018280-756b-455c-89fa-b1e1323e6e52",
+            "data": {
+              "type": "tm.Store",
+              "name": "Backup-Daten",
+              "description": "Gespeicerte Backups der Systemdaten.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": true,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": [
+                {
+                  "id": "3e4f118d-f48e-4614-80ea-db0b9a4a399c",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Unbefugte könnten Backups verändern oder löschen.",
+                  "mitigation": "Verschlüsselung und regelmäßige Überprüfungen der Backup-Integrität.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 33,
+                  "score": "8"
+                },
+                {
+                  "id": "da524abf-fb49-46cf-b548-f92c13d662dc",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Überlastung des BAckup-Dienstes durch übermäßige Anfragen.",
+                  "mitigation": "Ressourcenmanagement und Limits für Anfragen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 34,
+                  "score": "6"
+                },
+                {
+                  "id": "d58073c5-4665-43e0-a912-2f16121c87bd",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Offenlegung sensibler in den Backup-Daten gespeicherter Informationen.",
+                  "mitigation": "Datenverschlüsselung und Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 35,
+                  "score": "8"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 390,
+              "y": 85
+            },
+            "size": {
+              "width": 130,
+              "height": 100
+            },
+            "attrs": {
+              "text": {
+                "text": "Administrator"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 15,
+            "id": "b82bd248-dfb1-4cd6-b964-8250445f8051",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Administrator",
+              "description": " Verwalter des LDAP-Dienstes und des Systems.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "providesAuthentication": true,
+              "threats": [
+                {
+                  "id": "079e12f7-2421-4b84-909c-9f499254e26f",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Impersonitation des Administrators und unbefugter Zugriff.",
+                  "mitigation": "Nutzung von MFA, sichere einzigartige Passwörter, Überwachung des Zugriffs.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 36,
+                  "score": "8"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 335.5,
+              "y": 330
+            },
+            "size": {
+              "width": 112.5,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Benutzer/ Clients"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 16,
+            "id": "a67ef182-2cef-4bb0-a845-049ee927c034",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Benutzer/ Clients",
+              "description": "Externe benutzer, welche die LDAP-Dienste nutzen.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "providesAuthentication": true,
+              "threats": [
+                {
+                  "id": "a7df2550-4515-497e-aca2-910a27849d51",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Angreifer könnten sich als legitime Benutzer ausgeben.",
+                  "mitigation": "Sichere einzigartige Passwörter, MFA, Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 38,
+                  "score": "7"
+                }
+              ]
+            }
+          },
+          {
+            "position": {
+              "x": 1400,
+              "y": 480
+            },
+            "size": {
+              "width": 130,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Externes Netzwerk"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": null
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 17,
+            "id": "8e4782ec-7fc1-46bc-943a-7a83aaedf0e9",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Externes Netzwerk",
+              "description": "Alle Endgeräte und personen außerhhalb des loklaen Netzwerks ",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "providesAuthentication": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 870,
+              "y": 570
+            },
+            "size": {
+              "width": 110,
+              "height": 110
+            },
+            "attrs": {
+              "text": {
+                "text": "Wazuh-Agent"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              }
+            },
+            "visible": true,
+            "shape": "process",
+            "zIndex": 18,
+            "id": "911ce702-3486-46a8-bda9-b6a7c570f3eb",
+            "data": {
+              "type": "tm.Process",
+              "name": "Wazuh-Agent",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Element ist noch nicht implementiert.",
+              "hasOpenThreats": false,
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false,
+              "privilegeLevel": "",
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 1130,
+              "y": 595
+            },
+            "size": {
+              "width": 120,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "VPN"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 20,
+            "id": "39efded3-02d9-4eb6-861d-dc992d44cfb7",
+            "data": {
+              "type": "tm.Store",
+              "name": "VPN",
+              "description": "Zugriffsteuerung für Remote Mitarbeiter",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der VPN Server ist niocht teil unseres Projektes.",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 395,
+              "y": 705.0000000000031
+            },
+            "size": {
+              "width": 120,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Backup-Server"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 21,
+            "id": "f9588e9d-a026-4070-beeb-7b87d4b1751d",
+            "data": {
+              "type": "tm.Store",
+              "name": "Backup-Server",
+              "description": "Dezidierter Server zur Speicherung und zum Abrufen von Backupdateien.",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der Backup-Server ist noch nicht implementiert.\n",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 1190,
+              "y": 705.0000000000031
+            },
+            "size": {
+              "width": 112.5,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Webserver"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 22,
+            "id": "670247e8-6196-4166-bd70-ca65496168a6",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Webserver",
+              "description": "Der Webserver der Smooth Beans GmbH",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der Webserver ist nicht Teil dieses Projektes.",
+              "hasOpenThreats": false,
+              "providesAuthentication": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 700,
+              "y": 705.0000000000031
+            },
+            "size": {
+              "width": 120,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Wazuh-Server"
+              },
+              "topLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              },
+              "bottomLine": {
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              }
+            },
+            "visible": true,
+            "shape": "store",
+            "zIndex": 23,
+            "id": "7efcc21f-1677-4951-bcd0-6089c485e567",
+            "data": {
+              "type": "tm.Store",
+              "name": "Wazuh-Server",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Der Wazuh-Server ist nicht Teil dieses Projekts.",
+              "hasOpenThreats": false,
+              "isALog": false,
+              "isEncrypted": false,
+              "isSigned": false,
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": []
+            }
+          },
+          {
+            "position": {
+              "x": 950,
+              "y": 735
+            },
+            "size": {
+              "width": 112.5,
+              "height": 60
+            },
+            "attrs": {
+              "text": {
+                "text": "Wazuh-Logs"
+              },
+              "body": {
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
+                "strokeDasharray": "4 3"
+              }
+            },
+            "visible": true,
+            "shape": "actor",
+            "zIndex": 24,
+            "id": "96c76e95-f431-4117-ba8c-184729b162bc",
+            "data": {
+              "type": "tm.Actor",
+              "name": "Wazuh-Logs",
+              "description": "Wazuh Datenbank zur speicherung der gesammelten Logs.",
+              "outOfScope": true,
+              "reasonOutOfScope": "Wazuh ist nicht Teil diesers Projekts.",
+              "hasOpenThreats": false,
+              "providesAuthentication": false,
+              "threats": []
+            }
+          }
+        ]
+      }
+    ],
+    "diagramTop": 1,
+    "reviewer": "Max Mustermann",
+    "threatTop": 90
+  }
+}
