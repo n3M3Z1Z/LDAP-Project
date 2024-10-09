@@ -50,7 +50,7 @@ SSH Configuration: Ensure strong password policies, disable root login, and use 
 Firewall Rules: Restrict access to only necessary ports using UFW.
 Regular Updates: Keep the system and all software packages updated to minimize vulnerabilities.
 User Privileges: Follow the principle of least privilege when assigning user permissions.
-Threat Modeling
+Threat Modeling with Thraet-Dragon-ng
 Identify Assets: User data, authentication mechanisms, and sensitive information stored in the LDAP directory.
 Identify Threats: Unauthorized access, data leakage, and service disruptions.
 Assess Risks: Evaluate the likelihood and impact of identified threats, and implement appropriate mitigations.
