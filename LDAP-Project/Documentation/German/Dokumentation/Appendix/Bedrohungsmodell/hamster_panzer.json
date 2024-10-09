@@ -3,7 +3,7 @@
   "summary": {
     "title": "LDAP-Server hamster.panzer 192.168.56.100",
     "owner": "Smooth Beans GmbH",
-    "description": "Systemübersicht:\nDiese Virtuelle Maschine (VM) läuft auf Ununtu-Biotic und wird in VirtualBox gehostet. Diese Maschine dienst als administrativer Domain-Controller für die Smooth Beans GmbH mit dem Domain-Namen \"hamster.panzer\" mit der IP-Adresse 192.168.56.100. Die VM stellt zentrale Dienste wie LDAP und SSH bereit und legt besonderen Wert auf Sicherheit durch den Einsatz verschiedener Schutzmechanismen. Zukünftige Integationen umfassen ein Wazuh SIEM, einen Webserver, Client-Geräte sowie einen dezidierten Backup-Server.\n\nSystem-Spezifikationen:\n- Host-Plattform: VirtualBox VM\n- Betriebssystem: Ubuntu-Biotic\n- RAM: 4698 MB\n- CPU: 2 Kerne\n\nDienste:\n\n1. LDAP-Dienste:\n\nBereitstellung von Verzeichnisdiensten für die Administratordomäne 'hamster.panzer'. Dazu gehören Benutzer-Authentifizierung, Autorisierung und zentrale Verzeichnisverwaltung. \n\n2. Remote-Zugriffsdienst für die sichere Administration der VM und der LDAP-Dienste.\n\n\nSicherheitsfunktionen:\n\n- ClamAV & ClamAV-Daemon:\nBieten Echtzeitschutz und geplante Virenscans, zur Maleware Detektion um die Systemintegrität zu gewährleisten.\n\n- Snort:\nEin Netzwerk  Intrusion-Detection system, welches den Netzwerkwerkverkehr analysiert und bei potentiell schädlichen Aktivitäten Alarm schlägt.\n\n- Suricata:\nEin Netzwerk-Sicherheitsmonitoring-Tool, welches Eindringversuche erkennen  und verhinden, sowie das Netzwerk überwachen kann. Suricata ist ein Intrusion Detection und Intrusion Prevention System.\n\n- Fail2Ban:\nSchützt den LDAP-Server vor Brute-Force-Angriffen, indem es Anmeldeversuche überwacht und verdächtige IP-Adressen blockiert.\n\n-rkhunter:\nZur Detektion von Rootkits, Backdoors und lokalen Exploits, zur gewährleistung der Sicherheit und der Integrität des Systems.\n\n- UFW (Uncomplicated Firewall):\n Eine Firewall-Oberfläche für iptabels, welche den Zugriff auf bestimmte Dienste einschränkt und sichere Kommunikation sicherstellt. \n\n- AppArmor:\nEin Mandatory  Access Control (MAC)-Framework, welches Anwendungen innerhalb spezifischer Sicherheitsprofile beschränkt und so das Risoko bei einer eventuellen Kompromittierung minimiert.\n\nBackup-Strategie:\n\n- BorgBackup:\nDie VM nutzt neben den Snapshots auch BorgBackup für effiziente, duplizierte Systemdaten. Dies stellt eine zuverlässige Datenwiederherstellung und den Schutz vor Datenverlust sicher.\n\nNetzwerkkonfiguration:\n\n- IP-Adresse: 192.168.56.100\nDer virtuelle LADP-Server wurde mit einem Virtualbox typischen NAT-Netzwerkadpter für Updates und der Installation von Software sowie einem statischen Host-Only Netzwerkadapter zur Integration in das Unternehmens-Netzwerk konfiguriert. Dies gewährleistet einen verlässlichen Zugriff auf den Server aus dem internen Netzwerk bei gleichzeitiger gewährleistung der Verbindung in das Internet für Notwendige Updates.\n\n- Domain-Name: \"hamster.panzer\"\nDie Smooth Beans GmbH verwendet diesen einzigartigen Domain-Namen für die Verwaltung sowie die LDAP-Verzeichnisdiesnte.\n\nTrust Boundarys:\nTrust Boundaries sind in der IT-Sicherheit die Grenzlinien zwischen verschiedenen Systemen, Komponenten oder Zonen, die unterschiedliche Vertrauensniveaus haben. Diese Grenzen trennen Bereiche, in denen unterschiedliche Sicherheitsanforderungen gelten, z. B. ein internes Netzwerk und das Internet.\n\nInnerhalb eines Trust Boundaries wird davon ausgegangen, dass alle Komponenten ein gewisses Vertrauensniveau teilen, während bei Interaktionen über diese Grenze hinweg zusätzliche Sicherheitsmaßnahmen (wie Authentifizierung, Verschlüsselung oder Firewalls) notwendig sind. In dem Netzwerk des  Unternehmens \"Smooth Beans GmbH\" welches eigens für dieses Projekt entworfen wurde, wurden von uns mehrere Trust Boundarys definiert, welche nun kurz erläutert werden.\n\nTrust Boundary: LDAP-Administratoren:\nDie LDAP-Administratoren benötigen zur effektiven Administration der Admin-Domäne weitreichende Zugriffsberechtigungen, aus diesem Grund umfasst die Trust Boundary \"LDAP-Administratoren das gesamte Netzwerk. Nur die Mitglieder dieser Gruppe haben Zugriff und Zugang zu allen Ressourcen, sowie die nötigen Bechtigungen Änderungen und Konfigurationen vorzunehmen.\n\nTrust Boundary: Benutzer/ Clients:\nMitglieder dieser Gruppe haben lediglich Zugriff auf die Ressourcen welche für ihre Arbeit unerlässlich und Notwendig sind, dies umfasst den Zugriff auf LDAP-Dienste sowie den SSH-Dienst. Sie können keine Änderungen an den System- oder Softwarekonfigurationen vornehmen und erhalten keinen Zugriff auf essentielle Prozesse und Stores wie Log-Dateien oder Backup-Prozesse.\n\nTrust-Boundary: Internes Netzwerk:\nDies umfasst alle innerhalb des Firmen-Netzwerks, diese Grenze dienst der Abgrenzung zum Externen Netzwerk (Internet) Zugriff auf Ressourcen des Internen Netzwerks sind nur durch erfolgreiche Authentifizierung über den VPN-Server und die LDAP-Dienst möglich.\n\nTrust Boundary: Backup-Speicher:\nAuf diese Grenze haben lediglich die Administratoren Zugriff. In dieser Zone werden die Backup-Daten erstellt, gespeichert und im Notfall abgerufen.\n\nTrust Boundary: extern:\nDiese überschneidet sich mit der Demilitarisierten Zone. Die Firewall verhindert den unbefugten Zugriff durch unautorisierte Personen. Externe Entitäten ohne Zugriff auf das Interne Netzwerk haben lediglich Zugang zu den für sie zugänglichen ressourcen des Webservers, auf welchem sich auch der Webshop des Unternehmens befindet. \n\nDMZ-Demilitarisierte Zone:\nEine DMZ (Demilitarisierte Zone) ist ein Sicherheitskonzept in Netzwerken, das einen Bereich zwischen einem internen, vertrauenswürdigen Netzwerk und dem unsicheren Internet schafft. Die DMZ enthält in der Regel öffentlich zugängliche Server (wie Web- oder E-Mail-Server), während der direkte Zugriff auf das interne Netzwerk eingeschränkt wird.\n\nDas Ziel der DMZ ist es, kritische interne Systeme zu schützen, indem man sicherstellt, dass Angriffe auf öffentlich zugängliche Dienste nicht direkt ins interne Netzwerk gelangen. Der Datenverkehr in und aus der DMZ wird meist durch Firewalls und zusätzliche Sicherheitsrichtlinien kontrolliert.\n\nZukünftige Integration (Außerhalb des aktuellen Umfangs):\n\n- Wazuh-Agent:\nDer Wazuh-Agent wird installiert, um die Integration mit dem Wazuh SIEM zu ermöglichen, welches alle relevanten Log-Dateien gebündelt auswertet wodurch die Sicherheitsüberwachung und Ereignisskorrelation bietet.\n\n- Webserver:\nDer Webserver mit dem Online-Shop der Smooth Beans GmbH wird in die Domäne intigriet.\n\n- Backup-Server:\nDieses System wird mit einem dezidierten Backup-Server synchronisiert, um das Backup-Management zu gewährleisten.\n\n- Clients:\nVerschiedene Clients (Desktop/Notebooks) werden in der Zukunft über den LDAP-Server authentifiziert, dies zentralisiert das Benutzer-Management ebenso wie die Sicherheit des Netzwerks.\nAlle Log-Dateien werden verschlüsselt und schreibgeschützt gelagert, um unbefugten Zugriff zu verhindern. Der SSH-Dienst wird per RSA-Key geschützt.\n\nDie Out-of-Scope Elemente sind in dem STRIDE-Diagramm entsprechend dargestellt und dienen dort zur Orientierung, sie werden deshalb nicht  spezifisch analysiert und bewertet. Begründung:\n\n Diese Elemente wurden noch nicht der Domäne hinzugefügt wurden, weshalb sämtliche potentielle Bedrohungen welche auf diese Komponenten zutreffend sind, als nicht Mitiegiert bewertet werden müssen, dies bedarf keiner gesonderten Ausweisung in der nachfolgenden Analyse. eine Anpassung bzw. Erweiterung dieses Modells sollte Zeitnah nach deren Impementierung  erfolgen, um den Schutz des LDAP-Servers und des Netzwerkes weiterhin zu gewährleisten.\n\nDer VPN-Server, die Verwendung von Passwortmanagern, eine sichere Passwort-Policy werden als gegeben betrachtet. Auch der Einsatz von MFA (Multi-Faktor-Authentifizierung) wird als gegeben betrachtet. ",
+    "description": "Systemübersicht:\nDiese Virtuelle Maschine (VM) läuft auf Ununtu-Biotic und wird in VirtualBox gehostet. Diese Maschine dienst als administrativer Domain-Controller für die Smooth Beans GmbH mit dem Domain-Namen \"hamster.panzer\" mit der IP-Adresse 192.168.56.100. Die VM stellt zentrale Dienste wie LDAP und SSH bereit und legt besonderen Wert auf Sicherheit durch den Einsatz verschiedener Schutzmechanismen. Zukünftige Integrationen umfassen ein Wazuh SIEM, einen Webserver, Client-Geräte sowie einen dezidierten Backup-Server.\n\nSystem-Spezifikationen:\n- Host-Plattform: VirtualBox VM\n- Betriebssystem: Ubuntu-Biotic\n- RAM: 4698 MB\n- CPU: 2 Kerne\n\nDienste:\n\n1. LDAP-Dienste:\n\nBereitstellung von Verzeichnisdiensten für die Administratordomäne 'hamster.panzer'. Dazu gehören Benutzer-Authentifizierung, Autorisierung und zentrale Verzeichnisverwaltung. \n\n2. Remote-Zugriffsdienst für die sichere Administration der VM und der LDAP-Dienste.\nSSH-Dienst, VPN-Dienst.\n\nSicherheitsfunktionen:\n\n- ClamAV & ClamAV-Daemon:\nBieten Echtzeitschutz und geplante Virenscans, zur Maleware Detektion um die Systemintegrität zu gewährleisten.\n\n- Snort:\nEin Netzwerk  Intrusion-Detection system, welches den Netzwerkwerkverkehr analysiert und bei potentiell schädlichen Aktivitäten Alarm schlägt.\n\n- Suricata:\nEin Netzwerk-Sicherheitsmonitoring-Tool, welches Eindringversuche erkennen  und verhindern, sowie das Netzwerk überwachen kann. Suricata ist ein Intrusion Detection und Intrusion Prevention System.\n\n- Fail2Ban:\nSchützt den LDAP-Server vor Brute-Force-Angriffen, indem es Anmeldeversuche überwacht und verdächtige IP-Adressen blockiert.\n\n-rkhunter:\nZur Detektion von Rootkits, Backdoors und lokalen Exploits, zur Gewährleistung der Sicherheit und der Integrität des Systems.\n\n- UFW (Uncomplicated Firewall):\n Eine Firewall-Oberfläche für iptabels, welche den Zugriff auf bestimmte Dienste einschränkt und sichere Kommunikation sicherstellt. \n\n- AppArmor:\nEin Mandatory  Access Control (MAC)-Framework, welches Anwendungen innerhalb spezifischer Sicherheitsprofile beschränkt und so das Risoko bei einer eventuellen Kompromittierung minimiert.\n\nBackup-Strategie:\n\n- BorgBackup:\nDie VM nutzt neben den Snapshots auch BorgBackup für effiziente, duplizierte Systemdaten. Dies stellt eine zuverlässige Datenwiederherstellung und den Schutz vor Datenverlust sicher.\n\nNetzwerkkonfiguration:\n\n- IP-Adresse: 192.168.56.100\nDer virtuelle LADP-Server wurde mit einem Virtualbox typischen NAT-Netzwerkadpter für Updates und der Installation von Software sowie einem statischen Host-Only Netzwerkadapter zur Integration in das Unternehmens-Netzwerk konfiguriert. Dies gewährleistet einen verlässlichen Zugriff auf den Server aus dem internen Netzwerk bei gleichzeitiger gewährleistung der Verbindung in das Internet für Notwendige Updates.\n\n- Domain-Name: \"hamster.panzer\"\nDie Smooth Beans GmbH verwendet diesen einzigartigen Domain-Namen für die Verwaltung sowie die LDAP-Verzeichnisdiesnte.\n\nTrust Boundarys:\nTrust Boundaries sind in der IT-Sicherheit die Grenzlinien zwischen verschiedenen Systemen, Komponenten oder Zonen, die unterschiedliche Vertrauensniveaus haben. Diese Grenzen trennen Bereiche, in denen unterschiedliche Sicherheitsanforderungen gelten, z. B. ein internes Netzwerk und das Internet.\n\nInnerhalb eines Trust Boundaries wird davon ausgegangen, dass alle Komponenten ein gewisses Vertrauensniveau teilen, während bei Interaktionen über diese Grenze hinweg zusätzliche Sicherheitsmaßnahmen (wie Authentifizierung, Verschlüsselung oder Firewalls) notwendig sind. In dem Netzwerk des  Unternehmens \"Smooth Beans GmbH\" welches eigens für dieses Projekt entworfen wurde, wurden von uns mehrere Trust Boundarys definiert, welche nun kurz erläutert werden.\n\nTrust Boundary: LDAP-Administratoren:\nDie LDAP-Administratoren benötigen zur effektiven Administration der Admin-Domäne weitreichende Zugriffsberechtigungen, aus diesem Grund umfasst die Trust Boundary \"LDAP-Administratoren das gesamte Netzwerk. Nur die Mitglieder dieser Gruppe haben Zugriff und Zugang zu allen Ressourcen, sowie die nötigen Bechtigungen Änderungen und Konfigurationen vorzunehmen.\n\nTrust Boundary: Benutzer/ Clients:\nMitglieder dieser Gruppe haben lediglich Zugriff auf die Ressourcen welche für ihre Arbeit unerlässlich und Notwendig sind, dies umfasst den Zugriff auf LDAP-Dienste sowie den SSH-Dienst. Sie können keine Änderungen an den System- oder Softwarekonfigurationen vornehmen und erhalten keinen Zugriff auf essentielle Prozesse und Stores wie Log-Dateien oder Backup-Prozesse.\n\nTrust-Boundary: Internes Netzwerk:\nDies umfasst alle innerhalb des Firmen-Netzwerks, diese Grenze dienst der Abgrenzung zum Externen Netzwerk (Internet) Zugriff auf Ressourcen des Internen Netzwerks sind nur durch erfolgreiche Authentifizierung über den VPN-Server und die LDAP-Dienst möglich.\n\nTrust Boundary: Backup-Speicher:\nAuf diese Grenze haben lediglich die Administratoren Zugriff. In dieser Zone werden die Backup-Daten erstellt, gespeichert und im Notfall abgerufen.\n\nTrust Boundary: extern:\nDiese überschneidet sich mit der Demilitarisierten Zone. Die Firewall verhindert den unbefugten Zugriff durch unautorisierte Personen. Externe Entitäten ohne Zugriff auf das Interne Netzwerk haben lediglich Zugang zu den für sie zugänglichen Ressourcen des Webservers, auf welchem sich auch der Webshop des Unternehmens befindet. \n\nDMZ-Demilitarisierte Zone:\nEine DMZ (Demilitarisierte Zone) ist ein Sicherheitskonzept in Netzwerken, das einen Bereich zwischen einem internen, vertrauenswürdigen Netzwerk und dem unsicheren Internet schafft. Die DMZ enthält in der Regel öffentlich zugängliche Server (wie Web- oder E-Mail-Server), während der direkte Zugriff auf das interne Netzwerk eingeschränkt wird.\n\nDas Ziel der DMZ ist es, kritische interne Systeme zu schützen, indem man sicherstellt, dass Angriffe auf öffentlich zugängliche Dienste nicht direkt ins interne Netzwerk gelangen. Der Datenverkehr in und aus der DMZ wird meist durch Firewalls und zusätzliche Sicherheitsrichtlinien kontrolliert.\n\nZukünftige Integration (Außerhalb des aktuellen Umfangs):\n\n- Wazuh-Agent:\nDer Wazuh-Agent wird installiert, um die Integration mit dem Wazuh SIEM zu ermöglichen, welches alle relevanten Log-Dateien gebündelt auswertet wodurch die Sicherheitsüberwachung und Ereignisskorrelation bietet.\n\n- Webserver:\nDer Webserver mit dem Online-Shop der Smooth Beans GmbH wird in die Domäne intigriet.\n\n- Backup-Server:\nDieses System wird mit einem dezidierten Backup-Server synchronisiert, um das Backup-Management zu gewährleisten.\n\n- Clients:\nVerschiedene Clients (Desktop/Notebooks) werden in der Zukunft über den LDAP-Server authentifiziert, dies zentralisiert das Benutzer-Management ebenso wie die Sicherheit des Netzwerks.\nAlle Log-Dateien werden verschlüsselt und schreibgeschützt gelagert, um unbefugten Zugriff zu verhindern. Der SSH-Dienst wird per RSA-Key geschützt.\n\nDie Out-of-Scope Elemente sind in dem STRIDE-Diagramm entsprechend dargestellt und dienen dort zur Orientierung, sie werden deshalb nicht  spezifisch analysiert und bewertet. Begründung:\n\n Diese Elemente wurden noch nicht der Domäne hinzugefügt wurden, weshalb sämtliche potentielle Bedrohungen welche auf diese Komponenten zutreffend sind, als nicht Mitiegiert bewertet werden müssen, dies bedarf keiner gesonderten Ausweisung in der nachfolgenden Analyse. eine Anpassung bzw. Erweiterung dieses Modells sollte Zeitnah nach deren Implementierung  erfolgen, um den Schutz des LDAP-Servers und des Netzwerkes weiterhin zu gewährleisten.\n\nDer VPN-Server, die Verwendung von Passwortmanagern, eine sichere Passwort-Policy werden als gegeben betrachtet. Auch der Einsatz von MFA (Multi-Faktor-Authentifizierung) wird als gegeben betrachtet. ",
     "id": 0
   },
   "detail": {
@@ -104,8 +104,8 @@
           },
           {
             "position": {
-              "x": 22.5,
-              "y": 125.00000000000307
+              "x": 80,
+              "y": 115
             },
             "size": {
               "width": 1280,
@@ -129,8 +129,8 @@
           },
           {
             "position": {
-              "x": -40,
-              "y": 60
+              "x": 30,
+              "y": 70
             },
             "size": {
               "width": 1330,
@@ -783,55 +783,6 @@
                   "name": "block"
                 },
                 "sourceMarker": {
-                  "name": "block"
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Data Flow",
-              "description": "Bideirektionaler Datenfluss zwischen der LDAP-Datenbank und den LDAP-Diensten.",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": true,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": []
-            },
-            "id": "77db287e-2b4b-4f52-8a6e-7931082c3946",
-            "source": {
-              "cell": "f734a8ea-7f05-4e75-a34e-852375dbb80d"
-            },
-            "target": {
-              "cell": "c23d6cd5-53bd-4508-903f-a8501275a555"
-            },
-            "vertices": [
-              {
-                "x": 590,
-                "y": 340
-              },
-              {
-                "x": 680,
-                "y": 340
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
                   "name": ""
                 },
                 "strokeDasharray": "4 3"
@@ -1271,87 +1222,6 @@
               {
                 "x": 350,
                 "y": 300
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Data Flow",
-              "description": "Unidirektionaller Datenfluss von den LDAP-Diensten zu den Log-Dateien",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [
-                {
-                  "id": "ac061dff-04cc-4754-8e4f-4f265402bb3a",
-                  "title": "New STRIDE threat",
-                  "status": "Mitigated",
-                  "severity": "High",
-                  "type": "Tampering",
-                  "description": "Manipulation der Logs, um LDAP-Aktionen zu verbergen oder zu fälschen.",
-                  "mitigation": "Logs auf Remote-Server speichern, regelmäßige Integritätschecks.",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 48,
-                  "score": "7"
-                },
-                {
-                  "id": "a5b95843-6a9d-4de8-b0dd-d0f58a2f50c0",
-                  "title": "New STRIDE threat",
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Information disclosure",
-                  "description": "Sensible Informationen aus LDAP-Anfragen könnten die Log-Dateien offengelegt werden.",
-                  "mitigation": "Verschlüsselung der Logs, Zugriffskontrollen.",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 49,
-                  "score": "6"
-                }
-              ]
-            },
-            "id": "dfd6403d-4a46-4423-b9c2-308c20ad5709",
-            "source": {
-              "x": 768,
-              "y": 245
-            },
-            "target": {
-              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
-            },
-            "vertices": [
-              {
-                "x": 810,
-                "y": 245
-              },
-              {
-                "x": 810,
-                "y": 380
-              },
-              {
-                "x": 860,
-                "y": 340
               }
             ]
           },
@@ -2642,6 +2512,176 @@
             ]
           },
           {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Unidirektionaller Datenfluss von den LDAP-Diensten zu den Log-Dateien",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "ac061dff-04cc-4754-8e4f-4f265402bb3a",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Manipulation der Logs, um LDAP-Aktionen zu verbergen oder zu fälschen.",
+                  "mitigation": "Logs auf Remote-Server speichern, regelmäßige Integritätschecks.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 48,
+                  "score": "7"
+                },
+                {
+                  "id": "a5b95843-6a9d-4de8-b0dd-d0f58a2f50c0",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "Sensible Informationen aus LDAP-Anfragen könnten die Log-Dateien offengelegt werden.",
+                  "mitigation": "Verschlüsselung der Logs, Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 49,
+                  "score": "6"
+                }
+              ]
+            },
+            "id": "dfd6403d-4a46-4423-b9c2-308c20ad5709",
+            "source": {
+              "x": 768,
+              "y": 245
+            },
+            "target": {
+              "cell": "cfc2eb8a-119a-4262-b859-8b209796707b"
+            },
+            "vertices": [
+              {
+                "x": 810,
+                "y": 245
+              },
+              {
+                "x": 810,
+                "y": 380
+              },
+              {
+                "x": 860,
+                "y": 340
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Data Flow",
+              "description": "Bideirektionaler Datenfluss zwischen der LDAP-Datenbank und den LDAP-Diensten.",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "id": "a7e68ff4-4715-4023-a54c-eb0377e18006",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Daten in der LDAP-Datenbank oder im Datenfluss könnten manipuliert werden, was zu inkorrekten Informationen führt.",
+                  "mitigation": "Nutzung von Datenintegritätsprüfungen und Hashing; Transport Layer Security (TLS) verwenden.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 91,
+                  "score": "8"
+                },
+                {
+                  "id": "7089daa4-4287-4dd6-8924-91a1e9f8ca3a",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Sensible Informationen könnten während des Datenflusses abgehört oder unbefugt abgerufen werden.",
+                  "mitigation": "Verwendung von Verschlüsselung (z.B. TLS) für den Datenverkehr und Datenbankinhalte; Zugriffskontrollen.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 92,
+                  "score": "8"
+                },
+                {
+                  "id": "1b26ec74-f27e-4ac7-9d89-6dbbda7a5afd",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Angreifer könnten den Zugriff auf LDAP-Dienste durch Überlastung oder andere Angriffe beeinträchtigen.",
+                  "mitigation": "Implementierung von Rate-Limiting, Firewall-Regeln und Intrusion Detection Systems (IDS).",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 93,
+                  "score": "7"
+                }
+              ]
+            },
+            "id": "77db287e-2b4b-4f52-8a6e-7931082c3946",
+            "source": {
+              "cell": "f734a8ea-7f05-4e75-a34e-852375dbb80d"
+            },
+            "target": {
+              "cell": "c23d6cd5-53bd-4508-903f-a8501275a555"
+            },
+            "vertices": [
+              {
+                "x": 590,
+                "y": 340
+              },
+              {
+                "x": 680,
+                "y": 340
+              }
+            ]
+          },
+          {
             "position": {
               "x": 637.9999999999998,
               "y": 190
@@ -3329,6 +3369,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "Max Mustermann",
-    "threatTop": 90
+    "threatTop": 93
   }
 }
