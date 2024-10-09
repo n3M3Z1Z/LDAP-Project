@@ -1,3 +1,5 @@
+This repository contains our final project for the Specialist in System Administration and Cyber Security program. The mentioned company and all individuals are purely fictional. We decided to make our project public on GitHub because this project would not have been possible without the open-source community. All products used align with the philosophy of free access and the use of resources at no cost.
+
 # LDAP-Project
 A simple and Basic LDAP-Server, and Server hardening
 
