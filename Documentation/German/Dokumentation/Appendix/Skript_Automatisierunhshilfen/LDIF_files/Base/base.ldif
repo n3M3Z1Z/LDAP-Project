@@ -1,0 +1,25 @@
+# This is the base structure for the LDAP directory.
+dn: dc=hamster,dc=panzer
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: SmoothBeans
+dc: hamster
+
+# Admin entry
+dn: cn=admin,dc=hamster,dc=panzer
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: admin
+userPassword: Password123!  # Admin password
+description: LDAP Administrator for SmoothBeans
+
+# Organizational Units
+dn: ou=users,dc=hamster,dc=panzer
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=hamster,dc=panzer
+objectClass: organizationalUnit
+ou: groups
+
