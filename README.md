@@ -1,13 +1,4 @@
-  _______
- /        \
-|   HAMST3R  |
- ____/_____/
-( o.o )
- > ^ <
-__/\___/
-  \   ^
-   \  Panzer
-    \_____/
+![hamster_panzer](https://github.com/user-attachments/assets/0c4ee02d-8707-44fe-98b4-a3ef180e4be1)
 
 
 This repository contains our final project for the Specialist in System Administration and Cyber Security program. The mentioned company and all individuals are purely fictional. We decided to make our project public on GitHub because this project would not have been possible without the open-source community. All products used align with the philosophy of free access and the use of resources at no cost.
@@ -93,3 +84,4 @@ All PDFs related to this project are currently in German. An English version wil
 
 For further information or questions, please contact the project maintainers.
 
+![hamster_tank](https://github.com/user-attachments/assets/993c6bba-b231-4de1-8bfc-2d9b4781f618)
